@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMARA — La casa que te conoce.</title>
+<meta name="description" content="LUMARA transforma casas premium en hogares que se adelantan. Diseño, instalación y acompañamiento de un mismo equipo, en Mendoza.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1400 1400'%3E%3Crect width='1400' height='1400' fill='%230B0B0D'/%3E%3Cg fill='%23FAFAFB' transform='translate(0 350)'%3E%3Cpath d='M 41 669 L 645 65 Q 690 20 735 20 L 984 20 Q 1000 20 989 31 L 385 635 Q 340 680 295 680 L 46 680 Q 30 680 41 669 Z'/%3E%3Cpath d='M 1109 20 L 1358 20 Q 1374 20 1363 31 L 1030 364 Q 1024 370 1018 376 L 927 467 L 1243 467 Q 1257 467 1247 473 L 967 634 Q 880 684 870 684 C 770 684 714 530 634 450 L 1019 65 Q 1064 20 1109 20 Z'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0B0B0D;
+    --grafito: #1D1D20;
+    --niebla: #85868C;
+    --papel: #FAFAFB;
+    --hairline: rgba(250, 250, 251, 0.08);
+    --display: 'Space Grotesk', sans-serif;
+    --texto: 'Inter', sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --max-w: 1160px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--negro);
+    color: var(--papel);
+    font-family: var(--texto);
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible {
+    outline: 1.5px solid var(--papel);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  h1, h2 {
+    font-family: var(--display);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+  }
+
+  /* ---------- reveals (solo con JS vivo: sin script no se oculta nada) ---------- */
+  .js .r {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+  .r.in { opacity: 1; transform: none; }
+
+  /* ---------- chips y pills ---------- */
+  .chip {
+    display: inline-block;
+    padding: 7px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    color: var(--niebla);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .pill {
+    display: inline-block;
+    padding: 15px 34px;
+    border-radius: 999px;
+    background: var(--papel);
+    color: var(--negro);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: box-shadow 0.5s var(--ease), transform 0.5s var(--ease);
+  }
+  .pill:hover {
+    box-shadow: 0 0 60px rgba(250, 250, 251, 0.25);
+    transform: translateY(-1px);
+  }
+  .pill.fantasma {
+    background: transparent;
+    color: var(--papel);
+    border: 1px solid rgba(250, 250, 251, 0.22);
+  }
+  .pill.fantasma:hover { border-color: rgba(250, 250, 251, 0.5); box-shadow: none; }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    background: rgba(11, 11, 13, 0.82);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .lockup { display: flex; align-items: center; gap: 14px; }
+  .lockup svg { height: 17px; width: auto; display: block; }
+  .wordmark {
+    font-family: var(--display);
+    font-weight: 500;
+    /* cap-height ≈ 16px (mínimo del manual); el isotipo de 17px queda al cap-height */
+    font-size: 1.45rem;
+    letter-spacing: 0.22em;
+  }
+  nav .pill { padding: 9px 22px; font-size: 0.85rem; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 120px 0 80px;
+  }
+  .glow {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+  }
+  .hero .glow {
+    width: min(140vw, 1100px); height: min(140vw, 1100px);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -55%);
+    background: radial-gradient(closest-side, rgba(250, 250, 251, 0.13), transparent 70%);
+    animation: respira 9s ease-in-out infinite;
+  }
+  @keyframes respira {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 12vw, 10rem);
+    margin: 30px 0 26px;
+    position: relative;
+  }
+  .hero .sub {
+    color: var(--niebla);
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    max-width: 520px;
+    margin: 0 auto 42px;
+  }
+  .hero .chip, .hero .sub, .hero .cta { position: relative; }
+  .hero .cta .pill.fantasma { margin-left: 12px; }
+
+  /* carga: la luz aparece, no se prende de golpe */
+  .hero .chip, .hero h1, .hero .sub, .hero .cta {
+    opacity: 0;
+    animation: aparece 0.7s var(--ease) forwards;
+  }
+  .hero h1   { animation-delay: 0.15s; }
+  .hero .sub { animation-delay: 0.35s; }
+  .hero .cta { animation-delay: 0.55s; }
+  @keyframes aparece {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ---------- propuesta de valor ---------- */
+  .valor {
+    padding: clamp(110px, 16vh, 180px) 0;
+    text-align: center;
+  }
+  .valor h2 {
+    font-size: clamp(2rem, 6vw, 4.2rem);
+    max-width: 18ch;
+    margin: 0 auto 24px;
+  }
+  .valor p {
+    color: var(--niebla);
+    max-width: 52ch;
+    margin: 0 auto;
+    font-size: 1.05rem;
+  }
+
+  /* ---------- capacidades ---------- */
+  .capacidades { padding: 0 0 clamp(90px, 13vh, 150px); scroll-margin-top: 84px; }
+  .capacidades .chip { margin-bottom: 18px; }
+  .capacidades h2 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); max-width: 20ch; margin-bottom: 46px; }
+  .sol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 18px;
+  }
+  .sol {
+    background: var(--grafito);
+    border: 1px solid var(--hairline);
+    border-radius: 20px;
+    padding: 30px 28px;
+  }
+  .sol h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .sol p { color: var(--niebla); font-size: 0.95rem; }
+
+  /* ---------- un martes cualquiera ---------- */
+  .martes-head { text-align: center; padding: clamp(50px, 8vh, 90px) 0 0; }
+  .escena {
+    min-height: 74vh;
+    min-height: 74svh;
+    display: flex; align-items: center;
+    position: relative;
+  }
+  .escena .glow {
+    width: min(90vw, 760px); height: min(90vw, 760px);
+    background: radial-gradient(closest-side, rgba(250, 250, 251, var(--g-a, 0.1)), transparent 70%);
+    top: var(--g-y, 50%); left: var(--g-x, 50%);
+    transform: translate(-50%, -50%);
+  }
+  .escena[data-hora="manana"] { --g-x: 24%; --g-y: 18%; --g-a: 0.11; }
+  .escena[data-hora="tarde"]  { --g-x: 76%; --g-y: 52%; --g-a: 0.16; }
+  .escena[data-hora="noche"]  { --g-x: 50%; --g-y: 88%; --g-a: 0.06; }
+  .escena-inner { position: relative; max-width: 840px; }
+  .escena[data-hora="tarde"] .escena-inner { margin-left: auto; text-align: right; }
+  .escena[data-hora="noche"] .escena-inner { margin: 0 auto; text-align: center; }
+  .hora {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.14em;
+  }
+  .escena h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin: 22px 0 16px;
+  }
+  .escena .detalle { color: var(--niebla); font-size: 1.02rem; }
+  .martes-cierre {
+    text-align: center;
+    padding: clamp(50px, 8vh, 100px) 0 clamp(100px, 14vh, 160px);
+  }
+  .martes-cierre p {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    max-width: 24ch;
+    margin: 0 auto;
+  }
+
+  /* ---------- privacidad ---------- */
+  .privacidad {
+    padding: clamp(100px, 15vh, 170px) 0;
+    position: relative;
+  }
+  .vida {
+    position: absolute;
+    inset: 0;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 20px 0;
+    text-align: center;
+    color: var(--niebla);
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    filter: blur(4px);
+    opacity: 0.7;
+    user-select: none;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .vida span:nth-child(odd)  { transform: translateX(-9%); }
+  .vida span:nth-child(even) { transform: translateX(11%); }
+  .glass {
+    position: relative;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: clamp(48px, 7vw, 84px) clamp(28px, 6vw, 72px);
+    background: rgba(11, 11, 13, 0.28);
+    border: 1px solid rgba(250, 250, 251, 0.09);
+    border-radius: 28px;
+    -webkit-backdrop-filter: blur(20px) saturate(1.1);
+    backdrop-filter: blur(20px) saturate(1.1);
+    text-align: center;
+  }
+  .glass::before {
+    /* el único destello plata de la página */
+    content: "";
+    position: absolute;
+    top: -1px; left: 12%; right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #EDEEF2 30%, #C6C9CF 50%, #9EA3AB 70%, transparent);
+  }
+  .glass h2 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); text-wrap: balance; margin: 0 auto 20px; }
+  .glass .apoyo { color: var(--niebla); max-width: 40ch; margin: 0 auto; }
+
+  /* ---------- cómo trabajamos (papel) ---------- */
+  .proceso {
+    background: var(--papel);
+    color: var(--negro);
+    padding: clamp(100px, 15vh, 170px) 0;
+  }
+  .proceso .chip { border-color: rgba(11, 11, 13, 0.14); color: #6E7076; }
+  .proceso h2 {
+    font-size: clamp(1.9rem, 4.6vw, 3.4rem);
+    font-weight: 500;
+    max-width: 22ch;
+    margin: 28px 0 54px;
+  }
+  .pasos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(28px, 4vw, 48px);
+  }
+  .paso { border-top: 1px solid rgba(11, 11, 13, 0.14); padding-top: 22px; }
+  .paso .num {
+    font-family: var(--display);
+    font-variant-numeric: tabular-nums;
+    color: #6E7076;
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+  }
+  .paso h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.35rem;
+    margin: 10px 0 10px;
+  }
+  .paso p { color: #6E7076; font-size: 0.98rem; }
+  .proceso .compromiso {
+    margin-top: 54px;
+    color: #6E7076;
+    max-width: 52ch;
+    font-size: 1.05rem;
+  }
+  .proceso .compromiso strong { color: var(--negro); font-weight: 500; }
+
+  /* ---------- arquitectos ---------- */
+  .arquitectos {
+    border-bottom: 1px solid var(--hairline);
+    padding: clamp(80px, 12vh, 130px) 0;
+  }
+  .arq-inner {
+    display: flex; flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .arquitectos h2 { font-size: clamp(1.7rem, 3.8vw, 2.8rem); max-width: 17ch; margin-top: 18px; }
+  .arq-datos {
+    color: var(--niebla);
+    font-size: 0.98rem;
+    max-width: 34ch;
+  }
+  .arq-datos p + p { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--hairline); }
+  .arq-datos .pill { margin-top: 28px; }
+
+  /* ---------- cta final ---------- */
+  .final {
+    padding: clamp(130px, 20vh, 220px) 0 clamp(90px, 12vh, 140px);
+    text-align: center;
+    position: relative;
+  }
+  .final .glow {
+    width: min(110vw, 900px); height: min(110vw, 900px);
+    top: 45%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side, rgba(250, 250, 251, 0.09), transparent 70%);
+  }
+  .iso-encendida { height: clamp(46px, 7vw, 68px); width: auto; margin-bottom: 40px; position: relative; }
+  .final h2 { font-size: clamp(2.4rem, 7vw, 5.5rem); margin-bottom: 20px; position: relative; }
+  .final .apoyo { color: var(--niebla); max-width: 44ch; margin: 0 auto 42px; position: relative; }
+  .final .cta { position: relative; }
+
+  /* ---------- footer ---------- */
+  footer {
+    border-top: 1px solid var(--hairline);
+    padding: 36px 0;
+  }
+  .foot-inner {
+    display: flex; flex-wrap: wrap;
+    align-items: center; justify-content: space-between;
+    gap: 18px;
+    color: var(--niebla);
+    font-size: 0.85rem;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 24px; }
+  .foot-links a:hover { color: var(--papel); }
+
+  @media (max-width: 640px) {
+    .arq-inner { align-items: flex-start; flex-direction: column; }
+    .escena[data-hora="tarde"] .escena-inner { margin-left: 0; text-align: left; }
+    .foot-inner { flex-direction: column; align-items: flex-start; }
+    .hero .cta .pill.fantasma { margin-left: 0; margin-top: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero .glow { animation: none; opacity: 0.85; }
+    .hero .chip, .hero h1, .hero .sub, .hero .cta { animation: none; opacity: 1; }
+    .js .r { opacity: 1; transform: none; transition: none; }
+    .pill { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- isotipo oficial — vector maestro del manual, se escala, nunca se redibuja -->
+    <g id="iso">
+      <path d="M 41 669 L 645 65 Q 690 20 735 20 L 984 20 Q 1000 20 989 31 L 385 635 Q 340 680 295 680 L 46 680 Q 30 680 41 669 Z"/>
+      <path d="M 1109 20 L 1358 20 Q 1374 20 1363 31 L 1030 364 Q 1024 370 1018 376 L 927 467 L 1243 467 Q 1257 467 1247 473 L 967 634 Q 880 684 870 684 C 770 684 714 530 634 450 L 1019 65 Q 1064 20 1109 20 Z"/>
+    </g>
+    <filter id="luzglow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="16" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="#" class="lockup" aria-label="LUMARA, inicio">
+      <svg viewBox="0 0 1400 700" fill="currentColor" aria-hidden="true"><use href="#iso"/></svg>
+      <span class="wordmark">LUMARA</span>
+    </a>
+    <a class="pill" href="https://wa.me/5492612580678?text=Hola%20LUMARA%2C%20quiero%20coordinar%20una%20consulta%20por%20mi%20casa." target="_blank" rel="noopener">Charlemos</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <span class="chip">Hogares inteligentes · Mendoza, AR</span>
+    <h1>Tu casa<br>te conoce.</h1>
+    <p class="sub">Casas que se adelantan a cómo vivís. Diseñadas, instaladas y cuidadas por un mismo equipo, acá en Mendoza.</p>
+    <div class="cta">
+      <a class="pill" href="https://wa.me/5492612580678?text=Hola%20LUMARA%2C%20quiero%20coordinar%20una%20consulta%20por%20mi%20casa." target="_blank" rel="noopener">Coordiná una consulta sin cargo</a>
+      <a class="pill fantasma" href="#capacidades">Ver qué puede hacer</a>
+    </div>
+  </div>
+</header>
+
+<section class="valor" aria-label="Propuesta de valor">
+  <div class="wrap">
+    <h2 class="r">Un solo equipo, un solo número.</h2>
+    <p class="r">Proyectamos, instalamos y acompañamos nosotros. Sin intermediarios, sin manuales que aprender, sin nada que configurar de tu lado. Vos vivís; del resto nos ocupamos nosotros.</p>
+  </div>
+</section>
+
+<section class="capacidades" id="capacidades" aria-label="La casa completa">
+  <div class="wrap">
+    <span class="chip r">La casa completa</span>
+    <h2 class="r">Todo lo que tu casa puede hacer sola.</h2>
+    <div class="sol-grid">
+      <div class="sol r">
+        <h3>Iluminación</h3>
+        <p>Escenas que acompañan el día. La luz justa en cada momento, sin buscar el interruptor.</p>
+      </div>
+      <div class="sol r">
+        <h3>Clima</h3>
+        <p>Cada ambiente a su temperatura, antes de que lo pidas. En invierno y en verano.</p>
+      </div>
+      <div class="sol r">
+        <h3>Audio multizona</h3>
+        <p>Tu música en toda la casa: por zonas independientes o toda la casa a la vez, siempre al volumen justo.</p>
+      </div>
+      <div class="sol r">
+        <h3>Cine en casa</h3>
+        <p>Una sala que se prepara sola: baja la luz, baja la pantalla, suena como debe sonar.</p>
+      </div>
+      <div class="sol r">
+        <h3>Seguridad y cámaras</h3>
+        <p>Tu casa te avisa lo que importa, y lo que ve queda adentro de tus paredes, no en manos de otros.</p>
+      </div>
+      <div class="sol r">
+        <h3>Cortinas y persianas</h3>
+        <p>La casa abre con el sol y cierra con la noche. La galería, el living y el quincho, en sintonía.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="sr-only">Un martes cualquiera</h2>
+  <div class="martes-head r">
+    <span class="chip" aria-hidden="true">Un martes cualquiera</span>
+  </div>
+
+  <div class="escena" data-hora="manana">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap" style="width:100%">
+      <div class="escena-inner r">
+        <span class="chip hora">07:15</span>
+        <h3>Amanecés. La casa ya templó el aire.</h3>
+        <p class="detalle">Nadie programó nada anoche.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="escena" data-hora="tarde">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap" style="width:100%">
+      <div class="escena-inner r">
+        <span class="chip hora">19:47</span>
+        <h3>Llegás. La luz ya sabía a qué hora volvías.</h3>
+        <p class="detalle">Nadie apretó un botón. Nadie abrió una app.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="escena" data-hora="noche">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap" style="width:100%">
+      <div class="escena-inner r">
+        <span class="chip hora">23:10</span>
+        <h3>La casa se prepara para el descanso, sola.</h3>
+        <p class="detalle">La luz baja al tono justo. Nadie tuvo que pensarlo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="martes-cierre r">
+    <div class="wrap">
+      <p>La mejor tecnología es la que no tenés que tocar.</p>
+    </div>
+  </div>
+</section>
+
+<section class="privacidad" aria-label="Privacidad">
+  <div class="vida" aria-hidden="true">
+    <span>martes 07:15 · el aire se templa antes del despertador</span>
+    <span>miércoles 18:40 · alguien vuelve más temprano que de costumbre</span>
+    <span>viernes 21:30 · película, la luz del living al 20%</span>
+    <span>domingo 09:10 · desayuno largo, música baja en la galería</span>
+    <span>lunes 23:45 · la última luz se apaga sola</span>
+  </div>
+  <div class="wrap">
+    <div class="glass r">
+      <h2>Lo que pasa en tu casa, se queda en tu casa.</h2>
+      <p class="apoyo">Tu vida no viaja a la nube, no se vende, no sale de tus paredes. Lo verdaderamente premium también es lo verdaderamente privado.</p>
+    </div>
+  </div>
+</section>
+
+<section class="proceso" aria-label="Cómo trabajamos">
+  <div class="wrap">
+    <span class="chip r">Cómo trabajamos</span>
+    <h2 class="r">De la idea a la postventa, sin soltarte la mano.</h2>
+    <div class="pasos">
+      <div class="paso r">
+        <span class="num">01</span>
+        <h3>Diseño</h3>
+        <p>Entramos temprano, mientras tu casa es un plano. Definimos qué va a hacer cada ambiente, con vos y con tu arquitecto.</p>
+      </div>
+      <div class="paso r">
+        <span class="num">02</span>
+        <h3>Instalación</h3>
+        <p>Prolija e invisible: nada a la vista que no sume. Todo queda probado y andando antes de entregarte la llave.</p>
+      </div>
+      <div class="paso r">
+        <span class="num">03</span>
+        <h3>Acompañamiento</h3>
+        <p>La casa queda a punto y nosotros seguimos ahí: ajustes, soporte y mejoras con el tiempo. Atendemos nosotros, siempre.</p>
+      </div>
+    </div>
+    <p class="compromiso r"><strong>Somos pocos y eso es a propósito:</strong> cada casa la cuidamos como si fuera la nuestra, y la persona que te atiende es la misma que la instaló.</p>
+  </div>
+</section>
+
+<section class="arquitectos" aria-label="Para arquitectos y estudios">
+  <div class="wrap arq-inner">
+    <div class="r">
+      <span class="chip">Arquitectos y estudios</span>
+      <h2>¿Proyectás premium? La capa que vuelve inolvidable tu obra.</h2>
+    </div>
+    <div class="arq-datos r">
+      <p>Se especifica temprano y se integra al diseño: el mejor cableado es el que nunca se ve.</p>
+      <p>No casamos tu obra con ninguna marca.</p>
+      <a class="pill fantasma" href="https://wa.me/5492612580678?text=Hola%20LUMARA%2C%20estoy%20proyectando%20una%20obra%20y%20quiero%20hablar%20con%20ustedes." target="_blank" rel="noopener">Hablemos mientras es un plano</a>
+    </div>
+  </div>
+</section>
+
+<section class="final" aria-label="Contacto">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <svg class="iso-encendida r" viewBox="0 0 1400 700" role="img" aria-label="Isotipo LUMARA encendido">
+      <g fill="#6E7076"><use href="#iso"/></g>
+      <line x1="988" y1="64" x2="630" y2="422" stroke="#FAFAFB" stroke-width="22" stroke-linecap="round" filter="url(#luzglow)" opacity="0.95"/>
+    </svg>
+    <h2 class="r">Charlemos de tu proyecto.</h2>
+    <p class="apoyo r">Una consulta sin cargo y sin compromiso: contanos tu casa o tu obra, y te decimos qué puede hacer sola.</p>
+    <div class="cta r">
+      <a class="pill" href="https://wa.me/5492612580678?text=Hola%20LUMARA%2C%20quiero%20coordinar%20una%20consulta." target="_blank" rel="noopener">Escribinos por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© 2026 LUMARA</span>
+    <div class="foot-links">
+      <a href="https://instagram.com/lumara_arg" target="_blank" rel="noopener">@lumara_arg</a>
+      <a href="mailto:lumaradomotica@gmail.com">Escribinos por mail</a>
+    </div>
+    <span>Hecho en Mendoza, Argentina</span>
+  </div>
+</footer>
+
+<script>
+  const targets = [...document.querySelectorAll('.r')];
+
+  if ('IntersectionObserver' in window) {
+    // Los estados ocultos solo existen bajo html.js: sin script no se oculta nada.
+    document.documentElement.classList.add('js');
+
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.15 });
+    targets.forEach((el) => io.observe(el));
+
+    // Un salto de scroll grande puede cruzar un elemento entre frames sin que el
+    // observer dispare nunca: barrido de respaldo para todo lo que ya quedó arriba.
+    let raf = 0;
+    addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        for (const el of targets) {
+          if (!el.classList.contains('in') && el.getBoundingClientRect().top < innerHeight * 0.9) {
+            el.classList.add('in');
+            io.unobserve(el);
+          }
+        }
+      });
+    }, { passive: true });
+  } else {
+    targets.forEach((el) => el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
